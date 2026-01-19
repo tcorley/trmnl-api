@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/configuration_schema.json",
+  "rules": {
+    "no-console": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/**/*.ts"],
+      "plugins": ["typescript"],
+      "rules": {
+        "typescript/no-explicit-any": "error"
+      }
+    }
+  ]
+}
