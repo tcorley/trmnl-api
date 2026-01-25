@@ -1,8 +1,11 @@
 import { Hono } from "hono"
+import { authMiddleware } from "./middleware/auth"
 import { helloRoute } from "./routes/hello"
 import { noRoute } from "./routes/no"
 
 const app = new Hono()
+
+app.use("/api/*", authMiddleware)
 
 app.route("/api", helloRoute)
 app.route("/api", noRoute)

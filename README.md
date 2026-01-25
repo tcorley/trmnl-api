@@ -20,10 +20,47 @@ Details: https://docs.usetrmnl.com/go/private-plugins/create-a-screen
 - `GET /api/hello` -> `{ "message": "Hello, TRMNL!" }`
 - `GET /api/no` -> proxies JSON from `https://naas.isalman.dev/no`
 
+## Authentication
+
+All `/api/*` endpoints require bearer token authentication. Requests without a
+valid token receive a `401 Unauthorized` response.
+
+### Setup
+
+1. Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+2. Generate a new access token (UUID):
+
+```bash
+uuidgen | tr '[:upper:]' '[:lower:]'
+```
+
+3. Add the token to your `.env` file:
+
+```
+ACCESS_TOKEN=your-generated-uuid
+```
+
+### Making authenticated requests
+
+Include the `Authorization` header with your token:
+
+```bash
+curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" http://localhost:3000/api/hello
+```
+
+The root endpoint (`GET /`) is public and can be used for health checks.
+
 ## Local dev
 
 ```bash
 bun install
+cp .env.example .env
+# Edit .env and set ACCESS_TOKEN
 bun run dev
 ```
 
@@ -34,6 +71,8 @@ Override via `HOST` and `PORT` env vars.
 
 - `bun run dev` - hot reload
 - `bun run start` - production mode
+- `bun run test` - run tests
+- `bun run typecheck` - run TypeScript type checking
 - `bun run lint` - run `oxlint`
 - `bun run format` - run `oxfmt`
 
