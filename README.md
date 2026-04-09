@@ -19,6 +19,7 @@ Details: https://docs.usetrmnl.com/go/private-plugins/create-a-screen
 
 - `GET /api/hello` -> `{ "message": "Hello, TRMNL!" }`
 - `GET /api/no` -> proxies JSON from `https://naas.isalman.dev/no`
+- `GET /api/plex/latest` -> latest movies and TV additions from Plex
 
 ## Authentication
 
@@ -43,6 +44,8 @@ uuidgen | tr '[:upper:]' '[:lower:]'
 
 ```
 ACCESS_TOKEN=your-generated-uuid
+PLEX_BASE_URL=http://your-plex-host:32400
+PLEX_TOKEN=your-plex-token
 ```
 
 ### Making authenticated requests
@@ -51,6 +54,14 @@ Include the `Authorization` header with your token:
 
 ```bash
 curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" http://localhost:3000/api/hello
+```
+
+Plex latest additions endpoint (optional `count` query clamped to 3-5):
+
+```bash
+curl \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  "http://localhost:3000/api/plex/latest?count=5"
 ```
 
 The root endpoint (`GET /`) is public and can be used for health checks.
