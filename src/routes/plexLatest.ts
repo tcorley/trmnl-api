@@ -212,7 +212,7 @@ function parsePlexItems(payload: string): PlexItem[] {
       subtitle: attributes.parentTitle ?? null,
       year: parseIntOrNull(attributes.year ?? null),
       addedAt: parseIntOrNull(attributes.addedAt ?? null),
-      imagePath: attributes.thumb ?? attributes.art ?? null,
+      imagePath: attributes.grandparentThumb ?? attributes.parentThumb ?? attributes.thumb ?? attributes.art ?? null,
     });
   }
 
@@ -233,7 +233,7 @@ function mapJsonItem(item: JsonObject): PlexItem {
     subtitle,
     year: asNumberOrNull(item.year),
     addedAt: asNumberOrNull(item.addedAt),
-    imagePath: asString(item.thumb) || asString(item.art) || null,
+    imagePath: asString(item.grandparentThumb) || asString(item.parentThumb) || asString(item.thumb) || asString(item.art) || null,
   };
 }
 
@@ -317,7 +317,11 @@ function buildImageUrl(
     return null;
   }
 
-  const url = new URL(imagePath, baseUrl);
+  // Use Plex's photo transcoder to force portrait dimensions (2:3 ratio)
+  const url = new URL('/photo/:/transcode', baseUrl);
+  url.searchParams.set('width', '200');
+  url.searchParams.set('height', '300');
+  url.searchParams.set('url', imagePath);
   url.searchParams.set('X-Plex-Token', token);
   return url.toString();
 }
